@@ -374,7 +374,10 @@
 
       <h3>Sign in to the GitHub CLI</h3>
       <p>After installing, open your terminal and run:</p>
-      <pre><code>gh auth login</code></pre>
+      <pre><code>gh auth login --scopes workflow</code></pre>
+      <div class="callout callout-warning">
+        <p>The <code>--scopes workflow</code> flag is important. Without it, you won't be able to push the deployment workflow file that makes GitHub Pages work. If you skip this flag, you'll get an error later that says "refusing to allow an OAuth App to create or update workflow."</p>
+      </div>
       <p>This will walk you through a short sign-in process:</p>
       <ol>
         <li>Select <strong>GitHub.com</strong> when asked which account to log into.</li>
@@ -387,6 +390,10 @@
       <p>To verify it worked, run:</p>
       <pre><code>gh auth status</code></pre>
       <p>You should see your GitHub username and a confirmation that you're logged in.</p>
+
+      <h3>Already logged in?</h3>
+      <p>If you've already signed into the GitHub CLI but didn't include the <code>workflow</code> scope, you can add it without signing out:</p>
+      <pre><code>gh auth refresh --scopes workflow</code></pre>
     </section>
 
     <!-- Make Your App Deployable -->
@@ -454,11 +461,11 @@
           <strong>Create a GitHub repository</strong>
           <p>Run this command in your project directory to create a new public repository on GitHub:</p>
           <pre><code>gh repo create &lt;repo-name&gt; --public --source=. --remote=origin --push</code></pre>
-          <p>This creates the repository, connects your local project to it, and pushes your code in one step.</p>
+          <p>This creates the repository, connects your local project to it, and pushes your code in one step. The push will also trigger your deployment workflow, but it may fail because GitHub Pages isn't enabled yet &mdash; that's normal.</p>
         </li>
         <li>
           <strong>Enable GitHub Pages</strong>
-          <p>Tell GitHub to serve your site using GitHub Actions (which is where your deploy workflow will run):</p>
+          <p>Tell GitHub to serve your site using GitHub Actions (which is where your deploy workflow runs):</p>
           <pre><code>gh api repos/&lt;your-github-username&gt;/&lt;repo-name&gt;/pages \
   --method POST \
   --field build_type=workflow</code></pre>
@@ -466,9 +473,14 @@
         </li>
         <li>
           <strong>Trigger a deployment</strong>
-          <p>If your GitHub Actions workflow is already in the repository, the push in step 1 should trigger it automatically. You can check its status:</p>
+          <p>If the first workflow run failed (because Pages wasn't enabled yet), re-run it now:</p>
+          <pre><code>gh run rerun $(gh run list --workflow=deploy.yml --limit=1 --json databaseId --jq '.[0].databaseId')</code></pre>
+          <p>Or, if you prefer, just push a small change to trigger a new run:</p>
+<pre><code>git commit --allow-empty -m "Trigger deploy"
+git push</code></pre>
+          <p>Check the status of the run:</p>
           <pre><code>gh run list --workflow=deploy.yml</code></pre>
-          <p>Wait for the run to complete. If it says <strong>completed</strong> and <strong>success</strong>, your site is live.</p>
+          <p>Wait for it to show <strong>completed</strong> and <strong>success</strong>. This usually takes about 30 seconds to a minute.</p>
         </li>
         <li>
           <strong>Find your site URL</strong>
@@ -504,6 +516,11 @@ git push</code></pre>
 
       <h3>Images or assets not loading</h3>
       <p>Check that your asset references use relative paths or include the <code>basePath</code>. An image at <code>/images/logo.png</code> will fail &mdash; it should be <code>/&lt;repo-name&gt;/images/logo.png</code> or use a relative path.</p>
+
+      <h3>"Refusing to allow an OAuth App to create or update workflow"</h3>
+      <p>This error means your GitHub CLI token doesn't have the <code>workflow</code> scope. Fix it by running:</p>
+      <pre><code>gh auth refresh --scopes workflow</code></pre>
+      <p>Then try your push again.</p>
 
       <h3>Build fails in GitHub Actions</h3>
       <p>Check the build logs:</p>
