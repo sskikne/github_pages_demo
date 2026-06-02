@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deploy Your App to GitHub Pages</title>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      color: #1a1a1a;
+      background: #ffffff;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 80px 0 48px;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    .hero h1 {
+      font-size: 2.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+
+    .hero p {
+      font-size: 1.125rem;
+      color: #555;
+    }
+
+    /* Sections */
+    section {
+      padding: 48px 0;
+      border-bottom: 1px solid #e5e5e5;
+    }
+
+    section:last-of-type {
+      border-bottom: none;
+      padding-bottom: 80px;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 16px;
+    }
+
+    h3 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 12px;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+
+    a {
+      color: #0969da;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    ul, ol {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    li:last-child {
+      margin-bottom: 0;
+    }
+
+    strong {
+      font-weight: 600;
+    }
+
+    /* Code */
+    code {
+      font-family: 'SF Mono', 'Fira Code', 'Fira Mono', Menlo, Consolas, monospace;
+      font-size: 0.875em;
+      background: #f4f4f5;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    pre {
+      background: #f4f4f5;
+      border-radius: 8px;
+      padding: 20px 24px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+      border: 1px solid #e5e5e5;
+    }
+
+    pre code {
+      background: none;
+      padding: 0;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    /* Callout boxes */
+    .callout {
+      background: #f8f9fa;
+      border-left: 3px solid #0969da;
+      padding: 16px 20px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 16px;
+    }
+
+    .callout p {
+      margin-bottom: 0;
+    }
+
+    .callout-warning {
+      border-left-color: #d97706;
+      background: #fffbeb;
+    }
+
+    /* Not-a-fit list */
+    .not-a-fit {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .not-a-fit li {
+      padding: 12px 16px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .not-a-fit li strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    /* Step numbers */
+    .steps {
+      counter-reset: step-counter;
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .steps > li {
+      counter-increment: step-counter;
+      padding-left: 40px;
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .steps > li::before {
+      content: counter(step-counter);
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 28px;
+      height: 28px;
+      background: #1a1a1a;
+      color: #fff;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Prompt block */
+    .prompt-block {
+      background: #1a1a1a;
+      color: #e5e5e5;
+      border-radius: 8px;
+      padding: 24px 28px;
+      overflow-x: auto;
+      margin-bottom: 16px;
+    }
+
+    .prompt-block code {
+      background: none;
+      color: #e5e5e5;
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .prompt-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 32px 0;
+      border-top: 1px solid #e5e5e5;
+      text-align: center;
+      color: #888;
+      font-size: 0.875rem;
+    }
+
+    /* Table of contents */
+    .toc {
+      list-style: none;
+      padding-left: 0;
+      margin-bottom: 0;
+    }
+
+    .toc li {
+      margin-bottom: 6px;
+    }
+
+    .toc a {
+      color: #555;
+      font-size: 0.95rem;
+    }
+
+    .toc a:hover {
+      color: #0969da;
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+      .hero {
+        padding: 48px 0 32px;
+      }
+
+      .hero h1 {
+        font-size: 1.75rem;
+      }
+
+      section {
+        padding: 32px 0;
+      }
+
+      h2 {
+        font-size: 1.25rem;
+      }
+
+      pre {
+        padding: 16px;
+      }
+
+      .prompt-block {
+        padding: 16px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+
+    <!-- Hero -->
+    <header class="hero">
+      <h1>Deploy Your App to GitHub Pages</h1>
+      <p>A step-by-step guide for turning your Claude Code project into a live website anyone can visit.</p>
+    </header>
+
+    <!-- Table of Contents -->
+    <section>
+      <h2>What's in This Guide</h2>
+      <ul class="toc">
+        <li><a href="#what-is-github-pages">What is GitHub Pages?</a></li>
+        <li><a href="#what-wont-work">What won't work on GitHub Pages</a></li>
+        <li><a href="#setting-up-github">Setting up your GitHub account</a></li>
+        <li><a href="#make-your-app-deployable">Make your app deployable</a></li>
+        <li><a href="#deploy">Deploy to GitHub Pages</a></li>
+        <li><a href="#troubleshooting">Troubleshooting</a></li>
+      </ul>
+    </section>
+
+    <!-- What is GitHub Pages -->
+    <section id="what-is-github-pages">
+      <h2>What is GitHub Pages?</h2>
+      <p>GitHub Pages is a free service that turns your code into a live website. You upload your files to GitHub, flip a switch, and your site is available at a public URL that you can share with anyone.</p>
+      <p>It works by serving <strong>static files</strong> &mdash; HTML, CSS, JavaScript, images, and data files. There are no servers to manage, no hosting fees, and no infrastructure to set up.</p>
+    </section>
+
+    <!-- What Won't Work -->
+    <section id="what-wont-work">
+      <h2>What Won't Work on GitHub Pages</h2>
+      <p>GitHub Pages only serves files. It cannot run code on a server. If your app depends on any of the following, GitHub Pages is not the right fit:</p>
+      <ul class="not-a-fit">
+        <li>
+          <strong>Server-side search</strong>
+          If your app sends search queries to a backend endpoint (including the Learning Commons Knowledge Graph search endpoint), those queries will not work. You can still display pre-loaded data, but live search requires a server.
+        </li>
+        <li>
+          <strong>Databases</strong>
+          PostgreSQL, MongoDB, SQLite, or any other database. All data must be saved as static files that ship with your site.
+        </li>
+        <li>
+          <strong>User login and accounts</strong>
+          Sign-up, sign-in, and session management all require a server. Third-party auth services (like "Sign in with Google") that are entirely client-side may still work.
+        </li>
+        <li>
+          <strong>API routes</strong>
+          Next.js API routes (<code>/api/*</code>), Express servers, or any backend endpoint you've built. These run on a server and are not supported.
+        </li>
+        <li>
+          <strong>Real-time features</strong>
+          WebSockets, live chat, collaborative editing, or anything that maintains a persistent connection to a server.
+        </li>
+        <li>
+          <strong>Server-side rendering</strong>
+          <code>getServerSideProps</code> in Next.js or any code that runs on the server for each page request. Static generation (<code>getStaticProps</code>) is fine because it runs once at build time.
+        </li>
+      </ul>
+      <div class="callout">
+        <p>If your app needs any of the above, consider <a href="https://vercel.com">Vercel</a>, <a href="https://www.netlify.com">Netlify</a>, or <a href="https://railway.app">Railway</a> instead. These platforms can run server-side code.</p>
+      </div>
+    </section>
+
+    <!-- Setting Up GitHub -->
+    <section id="setting-up-github">
+      <h2>Setting Up Your GitHub Account</h2>
+
+      <h3>Create a GitHub account</h3>
+      <p>If you don't already have a GitHub account, go to <a href="https://github.com/signup">github.com/signup</a> and follow the steps. You'll need an email address. The free plan is all you need.</p>
+
+      <h3>Install the GitHub CLI</h3>
+      <p>The GitHub CLI (<code>gh</code>) lets you interact with GitHub from your terminal &mdash; the same terminal where you use Claude Code. Install it for your operating system:</p>
+
+      <p><strong>Mac</strong> (using Homebrew):</p>
+      <pre><code>brew install gh</code></pre>
+
+      <p><strong>Windows</strong> (using winget):</p>
+      <pre><code>winget install --id GitHub.cli</code></pre>
+
+      <p><strong>Linux</strong> (Debian/Ubuntu):</p>
+<pre><code>(type -p wget >/dev/null || (sudo apt update && sudo apt-get install wget -y)) \
+  && sudo mkdir -p -m 755 /etc/apt/keyrings \
+  && out=$(mktemp) && wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg \
+  && cat $out | sudo tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
+  && sudo chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg \
+  && echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli-stable.list > /dev/null \
+  && sudo apt update \
+  && sudo apt install gh -y</code></pre>
+
+      <p>You can also find full installation instructions at <a href="https://cli.github.com">cli.github.com</a>.</p>
+
+      <h3>Sign in to the GitHub CLI</h3>
+      <p>After installing, open your terminal and run:</p>
+      <pre><code>gh auth login</code></pre>
+      <p>This will walk you through a short sign-in process:</p>
+      <ol>
+        <li>Select <strong>GitHub.com</strong> when asked which account to log into.</li>
+        <li>Select <strong>HTTPS</strong> as the preferred protocol.</li>
+        <li>Select <strong>Login with a web browser</strong> when asked how to authenticate.</li>
+        <li>Copy the one-time code shown in your terminal.</li>
+        <li>Press Enter &mdash; your browser will open to a GitHub page where you paste the code.</li>
+        <li>Authorize the CLI and return to your terminal. You should see a confirmation message.</li>
+      </ol>
+      <p>To verify it worked, run:</p>
+      <pre><code>gh auth status</code></pre>
+      <p>You should see your GitHub username and a confirmation that you're logged in.</p>
+    </section>
+
+    <!-- Make Your App Deployable -->
+    <section id="make-your-app-deployable">
+      <h2>Make Your App Deployable</h2>
+      <p>If you built your app with Claude Code, it's likely a Next.js or React (Vite) project. These frameworks can produce static files that GitHub Pages can serve, but they need some configuration first.</p>
+      <p>Instead of making these changes yourself, paste the following prompt into Claude Code. It will detect your project type and make all the necessary changes automatically.</p>
+
+      <div class="callout">
+        <p>Before running this prompt, replace <code>&lt;repo-name&gt;</code> with the name you plan to give your GitHub repository (for example, <code>my-knowledge-app</code>). This is needed so that asset paths work correctly on GitHub Pages.</p>
+      </div>
+
+      <span class="prompt-label">Copy and paste this into Claude Code</span>
+      <div class="prompt-block">
+<code>I want to deploy this project to GitHub Pages. Make it fully static and deployable. My repository name will be &lt;repo-name&gt;.
+
+1. Detect whether this is a Next.js or Vite/React project, then follow the appropriate steps below.
+
+2. If this is a Next.js project:
+   - Set output: 'export' in next.config.js (or next.config.mjs/ts)
+   - Remove any API routes (pages/api/ or app/api/ directories)
+   - Replace any getServerSideProps with static data or getStaticProps
+   - Set basePath and assetPrefix to '/&lt;repo-name&gt;' in the Next.js config
+   - Remove the 'images' config or set it to use unoptimized: true (the Next.js image optimizer requires a server)
+   - Create a .nojekyll file in the public/ directory
+
+3. If this is a Vite/React project:
+   - Set base: '/&lt;repo-name&gt;/' in vite.config.js (or .ts)
+
+4. For any data fetched from the Learning Commons Knowledge Graph API:
+   - Fetch data from https://api.learningcommons.org/knowledge-graph/v0
+     (API docs: https://docs.learningcommons.org/knowledge-graph/getting-started/quickstart)
+   - Save the API response as a static JSON file in the public/data/ directory
+   - Update all API calls in the app to import or fetch from the local JSON file instead
+   - Remove any search functionality that depends on a server-side search endpoint
+   - Leave a comment noting where the cached data came from and when it was last updated
+
+5. Remove any backend dependencies from package.json (express, database clients, server-only packages) and any server files.
+
+6. Create a GitHub Actions workflow at .github/workflows/deploy.yml that:
+   - Triggers on push to the main branch
+   - Installs dependencies and builds the project
+   - Deploys the build output directory to GitHub Pages using the actions/deploy-pages action
+   - Uses actions/configure-pages, actions/upload-pages-artifact, and actions/deploy-pages
+
+7. Build the project locally to confirm it succeeds, and report any errors you find.</code>
+      </div>
+
+      <p>After Claude Code finishes, review the changes it made. The key things to confirm:</p>
+      <ul>
+        <li>The project builds without errors (<code>npm run build</code>)</li>
+        <li>The build output is a folder of static files (usually <code>out/</code> for Next.js or <code>dist/</code> for Vite)</li>
+        <li>There are no remaining references to server-side features</li>
+        <li>A <code>.github/workflows/deploy.yml</code> file has been created</li>
+      </ul>
+    </section>
+
+    <!-- Deploy -->
+    <section id="deploy">
+      <h2>Deploy to GitHub Pages</h2>
+      <p>Now that your app builds to static files, you can deploy it. You can do this from your terminal, or paste these instructions into Claude Code and let it handle it for you.</p>
+
+      <ol class="steps">
+        <li>
+          <strong>Create a GitHub repository</strong>
+          <p>Run this command in your project directory to create a new public repository on GitHub:</p>
+          <pre><code>gh repo create &lt;repo-name&gt; --public --source=. --remote=origin --push</code></pre>
+          <p>This creates the repository, connects your local project to it, and pushes your code in one step.</p>
+        </li>
+        <li>
+          <strong>Enable GitHub Pages</strong>
+          <p>Tell GitHub to serve your site using GitHub Actions (which is where your deploy workflow will run):</p>
+          <pre><code>gh api repos/&lt;your-github-username&gt;/&lt;repo-name&gt;/pages \
+  --method POST \
+  --field build_type=workflow</code></pre>
+          <p>If you're not sure what your GitHub username is, run <code>gh api user --jq .login</code> to find it.</p>
+        </li>
+        <li>
+          <strong>Trigger a deployment</strong>
+          <p>If your GitHub Actions workflow is already in the repository, the push in step 1 should trigger it automatically. You can check its status:</p>
+          <pre><code>gh run list --workflow=deploy.yml</code></pre>
+          <p>Wait for the run to complete. If it says <strong>completed</strong> and <strong>success</strong>, your site is live.</p>
+        </li>
+        <li>
+          <strong>Find your site URL</strong>
+          <p>Your site is published at:</p>
+          <pre><code>https://&lt;your-github-username&gt;.github.io/&lt;repo-name&gt;/</code></pre>
+          <p>You can also find the URL by running:</p>
+          <pre><code>gh api repos/&lt;your-github-username&gt;/&lt;repo-name&gt;/pages --jq .html_url</code></pre>
+          <p>Open that URL in your browser. Your app is live and shareable.</p>
+        </li>
+      </ol>
+
+      <h3>Updating your site</h3>
+      <p>Every time you push changes to the <code>main</code> branch, GitHub Actions will automatically rebuild and redeploy your site. To push changes:</p>
+<pre><code>git add -A
+git commit -m "Update site"
+git push</code></pre>
+    </section>
+
+    <!-- Troubleshooting -->
+    <section id="troubleshooting">
+      <h2>Troubleshooting</h2>
+
+      <h3>Blank page after deployment</h3>
+      <p>This is almost always a path issue. GitHub Pages serves your site at <code>/&lt;repo-name&gt;/</code>, not at the root <code>/</code>. Make sure:</p>
+      <ul>
+        <li>Next.js: <code>basePath</code> and <code>assetPrefix</code> are set to <code>'/&lt;repo-name&gt;'</code> in your Next.js config</li>
+        <li>Vite: <code>base</code> is set to <code>'/&lt;repo-name&gt;/'</code> in <code>vite.config.js</code></li>
+      </ul>
+
+      <h3>404 errors when refreshing a page</h3>
+      <p>GitHub Pages doesn't support client-side routing out of the box. If your app uses React Router or Next.js dynamic routes, refreshing a page that isn't <code>index.html</code> will return a 404.</p>
+      <p>The fix: add a <code>404.html</code> file to your build output that's a copy of <code>index.html</code>. GitHub Pages serves <code>404.html</code> for any path it doesn't recognize, which lets your client-side router take over. Ask Claude Code to set this up for you.</p>
+
+      <h3>Images or assets not loading</h3>
+      <p>Check that your asset references use relative paths or include the <code>basePath</code>. An image at <code>/images/logo.png</code> will fail &mdash; it should be <code>/&lt;repo-name&gt;/images/logo.png</code> or use a relative path.</p>
+
+      <h3>Build fails in GitHub Actions</h3>
+      <p>Check the build logs:</p>
+      <pre><code>gh run view --log-failed</code></pre>
+      <p>Common causes:</p>
+      <ul>
+        <li>Missing dependencies &mdash; make sure <code>package-lock.json</code> is committed</li>
+        <li>Node version mismatch &mdash; the workflow should specify the same Node version you use locally</li>
+        <li>Server-side code that wasn't fully removed (e.g., a lingering <code>getServerSideProps</code>)</li>
+      </ul>
+
+      <h3>The GitHub Pages setting says "disabled"</h3>
+      <p>If the <code>gh api</code> command to enable Pages returned an error, you can enable it manually:</p>
+      <ol>
+        <li>Go to your repository on <a href="https://github.com">github.com</a></li>
+        <li>Click <strong>Settings</strong> (the tab along the top)</li>
+        <li>In the left sidebar, click <strong>Pages</strong></li>
+        <li>Under <strong>Build and deployment</strong>, set the source to <strong>GitHub Actions</strong></li>
+      </ol>
+
+      <h3>Changes aren't showing up</h3>
+      <p>After pushing, it takes 1&ndash;2 minutes for the GitHub Actions workflow to build and deploy. Check the status with <code>gh run list --workflow=deploy.yml</code>. If the latest run succeeded but you still see old content, try a hard refresh in your browser (Ctrl+Shift+R or Cmd+Shift+R).</p>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="container">
+      Built with Claude Code. Deployed on GitHub Pages.
+    </div>
+  </footer>
+
+</body>
+</html>
